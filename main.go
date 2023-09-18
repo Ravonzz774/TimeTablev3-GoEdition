@@ -14,20 +14,55 @@ import (
 )
 
 func main() {
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(cors.Default())
+
+	r.LoadHTMLGlob("templates/*")
+	r.Static("/static", "./static/")
 	// Конечная точка для получения расписания
-	r.GET("/api/week", func(c *gin.Context) {
+	r.GET("/", func(c *gin.Context) {
+		// Создание экземпляра расписания
 		schedule := updateSchedule()
-		c.JSON(http.StatusOK, schedule)
+		// Отправка HTML-страницы на основе шаблона
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"Date1": schedule.DateList[0].Monday,
+			"Date2": schedule.DateList[0].Tuesday,
+			"Date3": schedule.DateList[0].Wednesday,
+			"Date4": schedule.DateList[0].Thursday,
+			"Date5": schedule.DateList[0].Friday,
+			"Date6": schedule.DateList[0].Saturday,
+
+			"Monday":    schedule.Monday,
+			"Tuesday":   schedule.Tuesday,
+			"Wednesday": schedule.Wednesday,
+			"Thursday":  schedule.Thursday,
+			"Friday":    schedule.Friday,
+			"Saturday":  schedule.Saturday,
+
+		})
 	})
 
-	// Конечная точка для получения расписания следующей недели
-	r.GET("/api/next_week", func(c *gin.Context) {
-		nextWeekSchedule := updateNextWeekSchedule()
+	r.GET("/next", func(c *gin.Context) {
+		// Создание экземпляра расписания
+		schedule := updateNextWeekSchedule()
+		// Отправка HTML-страницы на основе шаблона
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"Date1": schedule.DateList[0].Monday,
+			"Date2": schedule.DateList[0].Tuesday,
+			"Date3": schedule.DateList[0].Wednesday,
+			"Date4": schedule.DateList[0].Thursday,
+			"Date5": schedule.DateList[0].Friday,
+			"Date6": schedule.DateList[0].Saturday,
 
-		c.JSON(http.StatusOK, nextWeekSchedule)
+			"Monday":    schedule.Monday,
+			"Tuesday":   schedule.Tuesday,
+			"Wednesday": schedule.Wednesday,
+			"Thursday":  schedule.Thursday,
+			"Friday":    schedule.Friday,
+			"Saturday":  schedule.Saturday,
+
+		})
 	})
 
 	// Запускаем веб-сервер
@@ -63,100 +98,90 @@ func updateSchedule() Schedule {
 	schedule := Schedule{}
 
 	//Понедельник
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Monday = append(schedule.Monday, lesson)
-		}
+		schedule.Monday = append(schedule.Monday, lesson)
+
 	}
 
 	//Вторник
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Tuesday = append(schedule.Tuesday, lesson)
-		}
+		schedule.Tuesday = append(schedule.Tuesday, lesson)
 	}
 
 	//Среда
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Wednesday = append(schedule.Wednesday, lesson)
-		}
+		schedule.Wednesday = append(schedule.Wednesday, lesson)
+
 	}
 
 	//Четверг
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Thursday = append(schedule.Thursday, lesson)
-		}
+		schedule.Thursday = append(schedule.Thursday, lesson)
 
 	}
 
 	//Пятница
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Friday = append(schedule.Friday, lesson)
-		}
+		schedule.Friday = append(schedule.Friday, lesson)
 	}
 
 	//Суббота
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Saturday = append(schedule.Saturday, lesson)
-		}
+		schedule.Saturday = append(schedule.Saturday, lesson)
 	}
 
 	datelist := DateList{
@@ -190,100 +215,88 @@ func updateNextWeekSchedule() Schedule {
 	schedule := Schedule{}
 
 	//Понедельник
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Monday = append(schedule.Monday, lesson)
-		}
+		schedule.Monday = append(schedule.Monday, lesson)
 	}
 
 	//Вторник
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Tuesday = append(schedule.Tuesday, lesson)
-		}
+		schedule.Tuesday = append(schedule.Tuesday, lesson)
 	}
 
 	//Среда
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[1]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Wednesday = append(schedule.Wednesday, lesson)
-		}
+		schedule.Wednesday = append(schedule.Wednesday, lesson)
 	}
 
 	//Четверг
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[1]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Thursday = append(schedule.Thursday, lesson)
-		}
+		schedule.Thursday = append(schedule.Thursday, lesson)
 
 	}
 
 	//Пятница
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Friday = append(schedule.Friday, lesson)
-		}
+		schedule.Friday = append(schedule.Friday, lesson)
 	}
 
 	//Суббота
-	for i := 1; i <= 7; i++ {
+	for i := 1; i <= 6; i++ {
 		lesson := Lesson{
 			Name:       removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[1]/span", i))),
 			Instructor: removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[1]/span", i))),
 			StartTime:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[2]", i))),
 			EndTime:    removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[3]", i))),
 			Classroom:  removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[2]/div[2]/div[2]/span", i))),
-			Number:     removeOtherName(searchTag(doc, fmt.Sprintf("/html/body/div[1]/div[3]/div[2]/table/tbody/tr/td[3]/div[2]/div[%d]/div[1]/div[1]", i))),
+			Number:     fmt.Sprintf("%d", i),
 		}
 
-		if lesson.Name != "" {
-			schedule.Saturday = append(schedule.Saturday, lesson)
-		}
+		schedule.Saturday = append(schedule.Saturday, lesson)
 	}
 
 	datelist := DateList{
