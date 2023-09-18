@@ -47,82 +47,90 @@
     <meta name="theme-color" content="#ffffff" />
   </head>
   <body>
-    <div class="header">
-      <a href="/" class="headerButton_left"></a>
-      <h1 class="group-name">ИС-361</h1>
-      <a href="/next" class="headerButton_right"></a>
-    </div>
-    <div class="schedule-container">
-      <div class="day-schedule">
-        <h2>{{.Date1}}</h2>
-        {{range $item := .Monday}}
-        <li>
-          <span class="number">{{$item.Number}}</span>
-          <span class="name">{{$item.Name}}</span>
-          <span class="instructor">{{$item.Instructor}}</span>
-          <span class="classroom">{{$item.Classroom}}</span>
-        </li>
-        {{end}}
-      </div>
+    <div class="wrapper">
+      <div class="content">
+        <div class="header">
+          <a href="/" class="headerButton_left"></a>
+          <h1 class="group-name">ИС-361</h1>
+          <a href="/next" class="headerButton_right"></a>
+        </div>
+        <div class="schedule-container">
+          <div class="day-schedule">
+            <h2>{{.Date1}}</h2>
+            {{range $item := .Monday}}
+            <li>
+              <span class="number">{{$item.Number}}</span>
+              <span class="name">{{$item.Name}}</span>
+              <span class="instructor">{{$item.Instructor}}</span>
+              <span class="classroom">{{$item.Classroom}}</span>
+            </li>
+            {{end}}
+          </div>
 
-      <div class="day-schedule">
-        <h2>{{.Date2}}</h2>
-        {{range $item := .Tuesday}}
-        <li>
-          <span class="number">{{$item.Number}}</span>
-          <span class="name">{{$item.Name}}</span>
-          <span class="instructor">{{$item.Instructor}}</span>
-          <span class="classroom">{{$item.Classroom}}</span>
-        </li>
-        {{end}}
-      </div>
+          <div class="day-schedule">
+            <h2>{{.Date2}}</h2>
+            {{range $item := .Tuesday}}
+            <li>
+              <span class="number">{{$item.Number}}</span>
+              <span class="name">{{$item.Name}}</span>
+              <span class="instructor">{{$item.Instructor}}</span>
+              <span class="classroom">{{$item.Classroom}}</span>
+            </li>
+            {{end}}
+          </div>
 
-      <div class="day-schedule">
-        <h2>{{.Date3}}</h2>
-        {{range $item := .Wednesday}}
-        <li>
-          <span class="number">{{$item.Number}}</span>
-          <span class="name">{{$item.Name}}</span>
-          <span class="instructor">{{$item.Instructor}}</span>
-          <span class="classroom">{{$item.Classroom}}</span>
-        </li>
-        {{end}}
-      </div>
+          <div class="day-schedule">
+            <h2>{{.Date3}}</h2>
+            {{range $item := .Wednesday}}
+            <li>
+              <span class="number">{{$item.Number}}</span>
+              <span class="name">{{$item.Name}}</span>
+              <span class="instructor">{{$item.Instructor}}</span>
+              <span class="classroom">{{$item.Classroom}}</span>
+            </li>
+            {{end}}
+          </div>
 
-      <div class="day-schedule">
-        <h2>{{.Date4}}</h2>
-        {{range $item := .Thursday}}
-        <li>
-          <span class="number">{{$item.Number}}</span>
-          <span class="name">{{$item.Name}}</span>
-          <span class="instructor">{{$item.Instructor}}</span>
-          <span class="classroom">{{$item.Classroom}}</span>
-        </li>
-        {{end}}
-      </div>
+          <div class="day-schedule">
+            <h2>{{.Date4}}</h2>
+            {{range $item := .Thursday}}
+            <li>
+              <span class="number">{{$item.Number}}</span>
+              <span class="name">{{$item.Name}}</span>
+              <span class="instructor">{{$item.Instructor}}</span>
+              <span class="classroom">{{$item.Classroom}}</span>
+            </li>
+            {{end}}
+          </div>
 
-      <div class="day-schedule">
-        <h2>{{.Date5}}</h2>
-        {{range $item := .Friday}}
-        <li>
-          <span class="number">{{$item.Number}}</span>
-          <span class="name">{{$item.Name}}</span>
-          <span class="instructor">{{$item.Instructor}}</span>
-          <span class="classroom">{{$item.Classroom}}</span>
-        </li>
-        {{end}}
-      </div>
+          <div class="day-schedule">
+            <h2>{{.Date5}}</h2>
+            {{range $item := .Friday}}
+            <li>
+              <span class="number">{{$item.Number}}</span>
+              <span class="name">{{$item.Name}}</span>
+              <span class="instructor">{{$item.Instructor}}</span>
+              <span class="classroom">{{$item.Classroom}}</span>
+            </li>
+            {{end}}
+          </div>
 
-      <div class="day-schedule">
-        <h2>{{.Date6}}</h2>
-        {{range $item := .Saturday}}
-        <li>
-          <span class="number">{{$item.Number}}</span>
-          <span class="name">{{$item.Name}}</span>
-          <span class="instructor">{{$item.Instructor}}</span>
-          <span class="classroom">{{$item.Classroom}}</span>
-        </li>
-        {{end}}
+          <div class="day-schedule">
+            <h2>{{.Date6}}</h2>
+            {{range $item := .Saturday}}
+            <li>
+              <span class="number">{{$item.Number}}</span>
+              <span class="name">{{$item.Name}}</span>
+              <span class="instructor">{{$item.Instructor}}</span>
+              <span class="classroom">{{$item.Classroom}}</span>
+            </li>
+            {{end}}
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <p>Made by Ravonzz.</p>
+        <a href="https://github.com/Ravonzz774/TimeTablev3-GoEdition">Github</a>
       </div>
     </div>
   </body>

@@ -19,6 +19,17 @@ h1 {
 }
 body {
   background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1 0 auto;
 }
 
 .header {
@@ -134,6 +145,30 @@ li .number {
   grid-row: 1;
   grid-column: 4;
   margin-right: 10px;
+}
+
+.footer {
+  display: flex;
+  gap: 10px;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #424242;
+
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.footer p {
+  color: white;
+  font-size: 1rem;
+}
+
+.footer a {
+  color: white;
+  font-size: 1rem;
+  text-decoration: underline white;
 }
 
 @media (min-width: 814px) {
