@@ -65,7 +65,7 @@ func main() {
 
 	// Запускаем веб-сервер
 	go func() {
-		if err := r.Run(":80"); err != nil {
+		if err := r.Run(":8080"); err != nil {
 			log.Fatal(err)
 		}
 	}()
